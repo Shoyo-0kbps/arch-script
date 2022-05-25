@@ -58,7 +58,7 @@ locale-gen
 ## Keyboard layout
 read -p "Enter the layout: " KEYBOARD_LAYOUT
 rm -f /etc/vconsole.conf
-echo $KEYBOARD_LAYOUT >> /etc/vconsole.conf
+echo "KEYMAP=$KEYBOARD_LAYOUT" >> /etc/vconsole.conf
 
 
 ## Hostname and Hosts
