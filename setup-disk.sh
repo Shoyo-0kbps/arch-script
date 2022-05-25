@@ -1,21 +1,5 @@
 #!/bin/bash
 
-DISKS_INFO="$(sudo fdisk -l | awk '/Disk \// {print $2,$3,$4}' | sed 's/.$//')"
-DISKS_INFO=($DISKS_INFO)
-NUM_DISKS=$(("${#DISKS_INFO[@]}" / 3 ))
-POINT_POS=0
-EXIT_FLAG=0
-declare -A M_DISKS_INFO
-
-for ((i = 0; i < "${NUM_DISKS}"; i++)); do 
-  
-  for ((j = 0; j < 3; j++)); do 
-    M_DISKS_INFO[$i,$j]="${DISKS_INFO[ ${POINT_POS} + $j ]}"
-  done
-  POINT_POS=$(("${POINT_POS}" + 3))
-
-done
-
 Show_Disks ()
 {
   echo 
@@ -30,6 +14,27 @@ Show_Disks ()
   done
 }
 
+## Get basic information about disks  
+DISKS_INFO="$(sudo fdisk -l | awk '/Disk \// {print $2,$3,$4}' | sed 's/.$//')"
+DISKS_INFO=($DISKS_INFO)
+NUM_DISKS=$(("${#DISKS_INFO[@]}" / 3 ))
+
+## Variables
+POINT_POS=0
+EXIT_FLAG=0
+declare -A M_DISKS_INFO
+
+## Data structure with disk informations
+for ((i = 0; i < "${NUM_DISKS}"; i++)); do 
+  
+  for ((j = 0; j < 3; j++)); do 
+    M_DISKS_INFO[$i,$j]="${DISKS_INFO[ ${POINT_POS} + $j ]}"
+  done
+  POINT_POS=$(("${POINT_POS}" + 3))
+
+done
+
+## Main loop 
 while [[ $EXIT_FLAG != 1 ]]; do
   
   echo "
