@@ -85,6 +85,22 @@ mkinitcpio -P
 pacman -S efibootmgr grub wpa_supplicant dosfstools dhcpcd mtools base-devel linux-headers openssh bash-completion git --noconfirm 
 
 
+## Instal and setup packages for dual boot
+echo
+read -p "Using Dual boot? (y/n)" DUAL_BOOT
+
+case "$DUAL_BOOT" in
+  y|Y)
+    pacman -S os-prober ntfs-3g --noconfirm
+    echo "GRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub 
+    ;;
+  n|N)
+    ;;
+  *)
+    ;;
+esac
+
+
 ## Case use extented partition
 echo 
 read -p "Using extented partition? (y/n)" EXT_PART
@@ -104,20 +120,6 @@ case "$EXT_PART" in
 esac
 
 
-## Instal and setup packages for dual boot
-echo
-read -p "Using Dual boot? (y/n)" DUAL_BOOT
-
-case "$DUAL_BOOT" in
-  y|Y)
-    pacman -S os-prober ntfs-3g --noconfirm
-    echo "GRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub 
-    ;;
-  n|N)
-    ;;
-  *)
-    ;;
-esac
 
 ## Enable base services 
 systemctl enable sshd
